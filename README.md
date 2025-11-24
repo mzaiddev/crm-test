@@ -1,16 +1,18 @@
-# Weeam Real Estate CRM
+# Hammad Real Estate CRM
 
 A complete CRM mini-application built with Vite, React, Chakra UI, Redux Toolkit, and LocalStorage.
 
 ## Features
 
 ### 🔐 Authentication
+
 - Login page with email/password
 - User session stored in LocalStorage
 - Private routes with automatic redirect to login
 - "Forgot Password" modal functionality
 
 ### 👥 Contacts Module
+
 - Full CRUD operations (Create, Read, Update, Delete)
 - Searchable contacts table with pagination
 - Contact fields: name, email, phone, company
@@ -23,6 +25,7 @@ A complete CRM mini-application built with Vite, React, Chakra UI, Redux Toolkit
 - All data persisted in LocalStorage
 
 ### 📊 Dashboard
+
 - Stats cards showing:
   - Total contacts
   - Contacts added today
@@ -33,6 +36,7 @@ A complete CRM mini-application built with Vite, React, Chakra UI, Redux Toolkit
 - Responsive card layout
 
 ### ⏱️ Activity Timeline
+
 - Automatic activity tracking for:
   - Contact additions
   - Contact edits
@@ -98,11 +102,13 @@ src/
 ## Usage
 
 ### Login
+
 1. Navigate to `/login`
 2. Enter any email and password
 3. Click "SIGN IN" to access the dashboard
 
 ### Managing Contacts
+
 1. Go to the Contacts page
 2. Use the search bar to filter contacts
 3. Click "Add Contact" to create new contacts
@@ -110,11 +116,13 @@ src/
 5. Navigate through pages using pagination controls
 
 ### Viewing Dashboard
+
 - See real-time statistics about your contacts
 - View contact growth chart
 - Monitor today's activity
 
 ### Activity Timeline
+
 - View complete history of all contact operations
 - See timestamps and activity types
 - Track changes over time
@@ -143,20 +151,24 @@ vercel
 ## Features Implementation
 
 ### Redux Slices
+
 - **authSlice**: Manages user authentication state
 - **contactsSlice**: Handles contacts data and operations
 - **uiSlice**: Controls UI state (modals, sidebar)
 
 ### Custom Hooks
+
 - **useAuth**: Authentication logic and user management
 - **useContacts**: Contact operations and derived state
 - **useLocalStorageState**: Generic localStorage state management
 
 ### Private Routes
+
 - Automatic redirect to login for unauthenticated users
 - Preserved intended destination after login
 
 ### Color Mode
+
 - Light/dark mode toggle
 - System preference detection
 - Persistent user preference
@@ -164,12 +176,15 @@ vercel
 ## Customization
 
 ### Theme Colors
+
 Edit `src/theme/theme.js` to customize the gold color palette and other theme settings.
 
 ### Contact Fields
+
 Modify the contact schema in `src/store/slices/contactsSlice.js` to add or remove fields.
 
 ### Chart Data
+
 Update `src/components/Dashboard/ContactsChart.jsx` to customize chart appearance and data.
 
 ## Browser Support

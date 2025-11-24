@@ -17,22 +17,23 @@ import {
   Skeleton,
   Badge,
   useDisclosure,
-} from '@chakra-ui/react';
+  useToast,
+} from "@chakra-ui/react";
 import {
   SearchIcon,
   EditIcon,
   DeleteIcon,
   StarIcon,
   AddIcon,
-} from '@chakra-ui/icons';
-import { MainLayout } from '../components/Layout/MainLayout';
-import { useContacts } from '../hooks/useContacts';
-import { useDispatch } from 'react-redux';
-import { openModal } from '../store/slices/uiSlice';
-import { useState } from 'react';
-import { AddContactModal } from '../components/Contacts/AddContactModal';
-import { EditContactModal } from '../components/Contacts/EditContactModal';
-import { DeleteContactModal } from '../components/Contacts/DeleteContactModal';
+} from "@chakra-ui/icons";
+import { MainLayout } from "../components/Layout/MainLayout";
+import { useContacts } from "../hooks/useContacts";
+import { useDispatch } from "react-redux";
+import { openModal } from "../store/slices/uiSlice";
+import { useState } from "react";
+import { AddContactModal } from "../components/Contacts/AddContactModal";
+import { EditContactModal } from "../components/Contacts/EditContactModal";
+import { DeleteContactModal } from "../components/Contacts/DeleteContactModal";
 
 export default function Contacts() {
   const {
@@ -47,7 +48,7 @@ export default function Contacts() {
   } = useContacts();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
+  const toast = useToast();
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -68,8 +69,8 @@ export default function Contacts() {
             leftIcon={<AddIcon />}
             bg="gold.500"
             color="white"
-            _hover={{ bg: 'gold.600' }}
-            onClick={() => dispatch(openModal({ type: 'add' }))}
+            _hover={{ bg: "gold.600" }}
+            onClick={() => dispatch(openModal({ type: "add" }))}
           >
             Add Contact
           </Button>
@@ -107,12 +108,24 @@ export default function Contacts() {
                 {isLoading ? (
                   [...Array(5)].map((_, i) => (
                     <Tr key={i}>
-                      <Td><Skeleton height="20px" /></Td>
-                      <Td><Skeleton height="20px" /></Td>
-                      <Td><Skeleton height="20px" /></Td>
-                      <Td><Skeleton height="20px" /></Td>
-                      <Td><Skeleton height="20px" /></Td>
-                      <Td><Skeleton height="20px" /></Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
+                      <Td>
+                        <Skeleton height="20px" />
+                      </Td>
                     </Tr>
                   ))
                 ) : paginatedContacts.length === 0 ? (
@@ -123,14 +136,14 @@ export default function Contacts() {
                       </Text>
                       <Text color="gray.400" fontSize="sm">
                         {searchQuery
-                          ? 'Try adjusting your search'
-                          : 'Add your first contact to get started'}
+                          ? "Try adjusting your search"
+                          : "Add your first contact to get started"}
                       </Text>
                     </Td>
                   </Tr>
                 ) : (
                   paginatedContacts.map((contact) => (
-                    <Tr key={contact.id} _hover={{ bg: 'gray.50' }}>
+                    <Tr key={contact.id} _hover={{ bg: "gray.50" }}>
                       <Td fontWeight="500">{contact.name}</Td>
                       <Td color="gray.600">{contact.email}</Td>
                       <Td color="gray.600">{contact.phone}</Td>
@@ -144,8 +157,20 @@ export default function Contacts() {
                             icon={<StarIcon />}
                             size="sm"
                             variant="ghost"
-                            colorScheme={contact.isFavorite ? 'yellow' : 'gray'}
-                            onClick={() => toggleFavorite(contact.id)}
+                            colorScheme={contact.isFavorite ? "yellow" : "gray"}
+                            onClick={() => {
+                              const action = contact.isFavorite
+                                ? "removed from"
+                                : "added to";
+                              toast({
+                                title: `Contact ${action} favorites`,
+                                description: `Contact has been successfully ${action} favorites`,
+                                status: contact.isFavorite ? "info" : "success",
+                                duration: 3000,
+                              });
+
+                              toggleFavorite(contact.id);
+                            }}
                             aria-label="Toggle favorite"
                           />
                           <IconButton
@@ -153,9 +178,9 @@ export default function Contacts() {
                             size="sm"
                             variant="ghost"
                             colorScheme="blue"
-                            onClick={() =>
-                              dispatch(openModal({ type: 'edit', contact }))
-                            }
+                            onClick={() => {
+                              dispatch(openModal({ type: "edit", contact }));
+                            }}
                             aria-label="Edit contact"
                           />
                           <IconButton
@@ -164,7 +189,7 @@ export default function Contacts() {
                             variant="ghost"
                             colorScheme="red"
                             onClick={() =>
-                              dispatch(openModal({ type: 'delete', contact }))
+                              dispatch(openModal({ type: "delete", contact }))
                             }
                             aria-label="Delete contact"
                           />
@@ -179,7 +204,13 @@ export default function Contacts() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <Flex justify="space-between" align="center" p={4} borderTop="1px" borderColor="gray.200">
+            <Flex
+              justify="space-between"
+              align="center"
+              p={4}
+              borderTop="1px"
+              borderColor="gray.200"
+            >
               <Text color="gray.600">
                 Page {currentPage} of {totalPages}
               </Text>

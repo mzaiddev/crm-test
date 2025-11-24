@@ -12,35 +12,35 @@ import {
   Input,
   VStack,
   useToast,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { closeModal } from '../../store/slices/uiSlice';
-import { useContacts } from '../../hooks/useContacts';
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { closeModal } from "../../store/slices/uiSlice";
+import { useContacts } from "../../hooks/useContacts";
 
 export const AddContactModal = () => {
   const dispatch = useDispatch();
-  const isOpen = useSelector((state) => state.ui.activeModal === 'add');
+  const isOpen = useSelector((state) => state.ui.activeModal === "add");
   const { addContact } = useContacts();
   const toast = useToast();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
   });
 
   const handleClose = () => {
     dispatch(closeModal());
-    setFormData({ name: '', email: '', phone: '', company: '' });
+    setFormData({ name: "", email: "", phone: "", company: "" });
   };
 
   const handleSubmit = () => {
     if (!formData.name || !formData.email) {
       toast({
-        title: 'Error',
-        description: 'Name and email are required',
-        status: 'error',
+        title: "Error",
+        description: "Name and email are required",
+        status: "error",
         duration: 3000,
       });
       return;
@@ -48,12 +48,20 @@ export const AddContactModal = () => {
 
     addContact(formData);
     toast({
-      title: 'Contact added',
-      description: 'Contact has been successfully added',
-      status: 'success',
+      title: "Contact added",
+      description: "Contact has been successfully added",
+      status: "success",
       duration: 3000,
     });
     handleClose();
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    // Allow only numbers
+    if (/^\d*$/.test(value)) {
+      setFormData({ ...formData, phone: value });
+    }
   };
 
   return (
@@ -88,10 +96,9 @@ export const AddContactModal = () => {
             <FormControl>
               <FormLabel>Phone</FormLabel>
               <Input
+                type="tel"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
+                onChange={handlePhoneChange}
                 placeholder="Enter phone"
               />
             </FormControl>
@@ -111,7 +118,12 @@ export const AddContactModal = () => {
           <Button variant="ghost" mr={3} onClick={handleClose}>
             Cancel
           </Button>
-          <Button bg="gold.500" color="white" _hover={{ bg: 'gold.600' }} onClick={handleSubmit}>
+          <Button
+            bg="gold.500"
+            color="white"
+            _hover={{ bg: "gold.600" }}
+            onClick={handleSubmit}
+          >
             Add Contact
           </Button>
         </ModalFooter>

@@ -1,75 +1,76 @@
+// Header.jsx
 import {
   Box,
   Flex,
   Text,
-  IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   Avatar,
-  useColorMode,
-  Badge,
-} from '@chakra-ui/react';
-import { MdNotifications, MdBrightness4, MdBrightness7 } from 'react-icons/md';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { useAuth } from '../../hooks/useAuth';
+  HStack,
+  IconButton,
+} from "@chakra-ui/react";
+import { ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
 
-export const Header = () => {
+export const Header = ({ onOpenSidebar }) => {
   const { user, handleLogout } = useAuth();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const isSidebarOpen = useSelector((state) => state.ui.isSidebarOpen);
 
   return (
     <Box
+      as="header"
       h="70px"
-      bg="white"
-      borderBottom="1px"
-      borderColor="gray.200"
-      px={6}
+      bgGradient="linear(to-r, gold.400, gold.500)"
+      px={{ base: 4, md: 6 }}
+      w="100%"
       position="sticky"
       top={0}
-      zIndex={100}
+      zIndex={900}
+      boxShadow="lg"
     >
-      <Flex h="full" align="center" justify="flex-end" gap={4}>
+      <Flex h="full" align="center" justify="space-between" gap={6}>
+        {/* Mobile Hamburger */}
         <IconButton
-          icon={colorMode === 'light' ? <MdBrightness4 /> : <MdBrightness7 />}
-          onClick={toggleColorMode}
+          display={{ base: "inline-flex", md: "none" }}
+          icon={<HamburgerIcon />}
+          onClick={onOpenSidebar}
+          aria-label="Open Sidebar"
+          size="sm"
           variant="ghost"
-          aria-label="Toggle color mode"
+          color="white"
+          _hover={{ bg: "gold.600" }}
         />
-        
-        <Box position="relative">
-          <IconButton
-            icon={<MdNotifications />}
-            variant="ghost"
-            aria-label="Notifications"
-          />
-          <Badge
-            position="absolute"
-            top="8px"
-            right="8px"
-            colorScheme="red"
-            borderRadius="full"
-            fontSize="xs"
+
+        <Box flex="1">
+          <Text
+            fontSize="lg"
+            fontWeight="bold"
+            display={{ base: "inline", md: "none" }}
+            color="white"
           >
-            12
-          </Badge>
+            Hammad CRM
+          </Text>
         </Box>
 
+        {/* User Menu */}
         <Menu>
-          <MenuButton>
-            <Flex align="center" gap={2} cursor="pointer">
-              <Text fontSize="sm" fontWeight="500">
-                Hey, {user?.name || 'Admin'}
+          <MenuButton _hover={{ bg: "gold.600" }} borderRadius="md">
+            <HStack spacing={2} cursor="pointer">
+              <Text fontSize="sm" fontWeight="500" color="white">
+                Hi, {user?.name || "Admin"}
               </Text>
-              <Avatar size="sm" bg="gold.500" />
-              <ChevronDownIcon />
-            </Flex>
+              <Avatar size="sm" bg="yellow.400" />
+              <ChevronDownIcon color="white" />
+            </HStack>
           </MenuButton>
-          <MenuList>
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>Settings</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuList borderRadius="md" boxShadow="lg" py={2}>
+            <MenuItem _hover={{ bg: "gold.100" }}>Profile</MenuItem>
+            <MenuItem _hover={{ bg: "red.100" }} onClick={handleLogout}>
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       </Flex>
