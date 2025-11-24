@@ -206,5 +206,3 @@ Update `src/components/Dashboard/ContactsChart.jsx` to customize chart appearanc
 MIT
 
 ## Author
-
-Built with ❤️ using Lovable
